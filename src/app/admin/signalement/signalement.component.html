@@ -1,0 +1,232 @@
+<div class="row mt-4 py-6">
+    <div class="col-lg-14 mb-lg-0 mb-4">
+      <div class="card ">
+        
+        
+        <div class="card-header pb-0 p-3">
+          <div class="d-flex justify-content-between" >
+            <h6 class="mb-4" style="font-size: 1.3em;">Liste des Alertes</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase font-weight-bolder opacity-20">#</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20">Alerte</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Localisation</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Utilisateur</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let alerte of tableauAlerte ; let ind=index" >
+                  <tr>
+                    <div style="text-align: center;">
+                      <img src="../assets/img/alert.png"  style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; margin-top: 20px;" alt="user1">
+                    </div>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <ng-container *ngFor="let alerte of tableauAlerte" ></ng-container>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h2 class="mb-0 " style="font-size: 1.5em;">{{alerte.titre}} </h2>
+                          <h4 class="text-xs text-secondary mb-0">{{ alerte.contenu.slice(0, 10) }}... </h4>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class=" mb-0" style="font-size: 1.2em; text-transform: uppercase;">{{alerte.localisation}} </p>
+                    </td>
+                    <td class="align-middle ">
+                      <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase; margin-left: 20px">{{ alerte.user.nom }} </p>
+                    </td>
+                    <td>
+                        <button class=" btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style=" font-size: 1em;  margin-left: 20px;" (click)="Voir(alerte)">Voir</button>
+                      </td>
+                      <td>
+                        <button *ngIf="alerte.statut" class="btn btn-danger" (click)="popupVisible=true; Voir(alerte)" style="text-transform: uppercase; margin-left: 10px;">
+                          Accepter
+                        </button>
+                      </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+<!-- BACKDROP + POPUP COMBINÉS -->
+<div *ngIf="popupVisible">
+  <!-- BACKDROP SOMBRE -->
+  <div class="position-fixed top-0 start-0 w-100 h-100"
+       style="background-color: rgba(0, 0, 0, 0.5); z-index: 1049;"></div>
+
+  <!-- POPUP -->
+  <div class="position-fixed top-50 start-50 translate-middle shadow-lg p-4 rounded"
+       style="z-index: 1050; background-color: white; border-left: 5px solid #198754; min-width: 300px;">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-check-circle-fill text-success me-2" style="font-size: 1.5rem;"></i>
+      <div>
+        <h6 class="mb-1">Confirmation</h6>
+        <div class="row align-items-center" style="margin-top: 20px;">
+          <div class="col-auto">
+            <p class="mb-0">Vous voudrez accepter l'alerte :</p>
+          </div>
+          <div class="col-auto">
+            <p class="mb-0" style="color: #7701cb; font-weight: bold;">{{ alerteSelect.titre }}</p>
+          </div>
+        </div>
+        <div class="row align-items-center" style="margin-top: 20px;">
+          <div class="col-auto">
+            <p class="mb-0">Adresse :</p>
+          </div>
+          <div class="col-auto">
+            <p class="mb-0" style="color: #0181cb; font-weight: bold;">{{ alerteSelect.localisation }}</p>
+          </div>
+        </div>
+        <div style="margin-top: 50px">
+          <button class=" btn btn-primary" (click)="retour()" style=" font-size: 1em;  margin-left: 20px;">Annuler</button>
+        
+          <button *ngIf="alerteSelect.statut" class="btn btn-danger" (click)="accepter(alerteSelect)" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasRight" aria-label="Close"  style="text-transform: uppercase; margin-left: 10px;">
+            Accepter
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="newPopupVisible">
+  <!-- BACKDROP SOMBRE -->
+  <div class="position-fixed top-0 start-0 w-100 h-100"
+       style="background-color: rgba(237, 121, 121, 0.063);; z-index: 1049;"></div>
+
+  <!-- POPUP -->
+  <div class="position-fixed top-50 start-50 translate-middle shadow-lg p-4 rounded"
+       style="z-index: 1050; background-color: white; border-left: 5px solid #ed881c; min-width: 300px;">
+       <button type="button" 
+       class="position-absolute top-0 end-0 m-2 p-1 bg-transparent border-0"
+       aria-label="Close"
+       (click)="newPopupVisible = false"
+       style="color: #7701cb; font-size: 1.5rem; line-height: 1;">
+ &times;
+</button>
+    
+       <div class="d-flex align-items-center">
+      <i class="bi bi-check-circle-fill text-success me-2" style="font-size: 1.5rem;"></i>
+      <div>
+        <h6 class="mb-1">Nouvel Alerte !</h6>
+        <div class="row align-items-center" style="margin-top: 20px;">
+          <div class="col-auto">
+            <p class="mb-0">Une nouvelle alerte a été signalée :</p>
+          </div>
+          <div class="col-auto">
+            <p class="mb-0" style="color: #7701cb; font-weight: bold;">{{ alerteSelect.titre }}</p>
+          </div>
+          <div class="row align-items-center" style="margin-top: 20px;">
+            <div class="col-auto">
+              <p class="mb-0">Adresse :</p>
+            </div>
+            <div class="col-auto">
+              <p class="mb-0" style="color: #0181cb; font-weight: bold;">{{ alerteSelect.localisation }}</p>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 50px">
+          <button class=" btn btn-primary" (click)="retour()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style=" font-size: 1em;  margin-left: 20px;">Voir</button>
+        
+          <button *ngIf="alerteSelect.statut" class="btn btn-danger" (click)="popupVisible=true;newPopupVisible=false" style="text-transform: uppercase; margin-left: 10px;">
+            Accepter
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h2 id="offcanvasRightLabel" style="text-transform: capitalize; color: crimson; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;">{{alerteSelect.titre}} </h2>
+  </div>
+  <div class="offcanvas-body">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <h5 class="mb-0">Date :</h5>
+      </div>
+      <div class="col-auto">
+        <p class="mb-0" style="color: #7701cb;">{{alerteSelect.date | date:'dd-MM-yyyy '}} à {{alerteSelect.date | date:'HH:mm'}}</p>
+      </div>
+    </div>
+    
+    <h4 style="margin-top: 20px;">Description</h4>
+    <p>{{alerteSelect.contenu}}</p>
+    <div style="display: flex; flex-wrap: wrap; justify-content:left; gap: 50px;"> 
+      <ng-container *ngFor="let image of alerteSelect.medias">
+        <div>
+          <img [src]="image" style="height: 120px ; width: 120px;" alt="Image de la catégorie"/>
+        </div>
+      </ng-container>
+</div>
+<div class="row align-items-center" style="margin-top: 20px;">
+  <div class="col-auto">
+    <h5 class="mb-0">Localisation :</h5>
+  </div>
+  <div class="col-auto">
+    <p class="mb-0" style="color: #7701cb;">{{ alerteSelect.localisation }}</p>
+  </div>
+</div>
+<div style=" margin-bottom: 20px; margin-top: 20px;">
+  <div id="modalMap" style="height: 300px; width: 100%;"></div>
+</div>
+    <div style= " bottom: 20px; right: 20px;">
+      <button class=" btn btn-primary" (click)="retour()" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" style=" font-size: 1em;  margin-left: 20px;">Retour</button>
+    
+      <button *ngIf="alerteSelect.statut" class="btn btn-danger" (click)="popupVisible=true"  style="text-transform: uppercase; margin-left: 10px;">
+        Accepter
+      </button>
+</div>
+</div>
+</div>
+
+<div *ngIf="SuccessPopupVisible">
+  <!-- BACKDROP SOMBRE -->
+  <div class="position-fixed top-0 start-0 w-100 h-100"
+       style="background-color: rgba(0, 0, 0, 0.5); z-index: 1049;"></div>
+
+  <!-- POPUP -->
+  <div class="position-fixed top-50 start-50 translate-middle shadow-lg p-4 rounded"
+       style="z-index: 1050; background-color: white; border-left: 5px solid #198754; min-width: 300px;">
+    <!-- Bouton de fermeture visible -->
+    <button type="button" 
+            class="position-absolute top-0 end-0 m-2 p-1 bg-transparent border-0"
+            aria-label="Close"
+            (click)="SuccessPopupVisible = false"
+            style="color: #7701cb; font-size: 1.5rem; line-height: 1;">
+      &times;
+    </button>
+    
+    <div class="d-flex align-items-center">
+      <i class="bi bi-check-circle-fill text-success me-2" style="font-size: 1.5rem;"></i>
+      <div>
+        <h6 class="mb-1">Succès</h6>
+        <div class="row align-items-center" style="margin-top: 20px;">
+          <div class="col-auto">
+            <p class="mb-0">Vous acceptez intervenir sur l'alerte :</p>
+          </div>
+          <div class="col-auto">
+            <p class="mb-0" style="color: #7701cb; font-weight: bold;">{{ alerteSelect.titre }}</p>
+          </div>
+        </div>
+        <p> Elle est disponible dans vos interventions </p>
+      </div>
+    </div>
+  </div>
+</div>
+

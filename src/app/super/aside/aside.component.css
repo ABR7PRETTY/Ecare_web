@@ -1,0 +1,7 @@
+.nav-link:hover {
+    border-radius: 0.5rem; /* pour un coin arrondi propre */
+    background-color: #7bb8fa19; /* couleur de fond au survol */
+    transition: box-shadow 0.2s ease-in-out;
+    font-weight: bold;
+    font-size: 1em; /* mettre le texte en gras au survol */
+  }

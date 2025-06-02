@@ -1,0 +1,300 @@
+<div *ngIf="page===2">
+  <div class="container-fluid py-6 " style="margin-left: 200px;">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="d-flex align-items-center">
+              <p class="mb-0"> Ajouter un nouveau Compte</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form #form="ngForm" (ngSubmit)="add()" novalidate>
+              <p class="text-uppercase text-sm">Informations du compte</p>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="titre" class="form-control-label">Nom d'utilisateur*
+                      <div *ngIf="username.invalid && username.touched" class="text-danger">Le nom d'utilisateur est
+                        requis.</div>
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="user.username" name="titre" placeholder=""
+                      required #username="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="image" class="form-control-label">Mot de passe*
+                      <div *ngIf="password.invalid && password.touched" class="text-danger">Le mot de passe est requise.
+                      </div>
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="user.password" name="password" required
+                      #password="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="image" class="form-control-label">Hopital</label>
+                    <div *ngIf="hopital.invalid && hopital.touched" class="text-danger">L'hopital est requise.</div>
+                    <select class="form-select form-control" style="font-size: 1.2em;" [(ngModel)]="user.hopital"
+                      name="hopital" #hopital="ngModel">
+                      <option *ngFor="let hopital of tableauHopital" [ngValue]="hopital">{{ hopital.nom }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nom" class="form-control-label">Nom*
+                      <div *ngIf="nom.invalid && nom.touched" class="text-danger">Le nom est requise.</div>
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="user.nom" name="nom" required #nom="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="prenom" class="form-control-label">Prenom*
+                      <div *ngIf="prenom.invalid && prenom.touched" class="text-danger">Le prenom est requise.</div>
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="user.prenom" name="prenom" required
+                      #prenom="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="telephone" class="form-control-label">Téléphone*
+                      <div *ngIf="telephone.invalid && telephone.touched" class="text-danger">Le telephone est requis.
+                      </div>
+
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="user.telephone" name="telephone" required
+                      #telephone="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titre" class="form-control-label">Profil</label>
+                    <input class="form-control" type="file" (change)="onFileSelected($event)">
+                  </div>
+                  <button [disabled]="form.invalid" class="btn btn-primary mr-2" style="margin-right: 30px;">Enregistrer</button>
+                  <button type="button" class="btn btn-light" (click)="annuler()">Retour</button>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="email" class="form-control-label">Email*
+                      <div *ngIf="email.invalid && email.touched" class="text-danger">L' email est requis.
+                      </div>
+
+                    </label>
+                    <input class="form-control" type="email" [(ngModel)]="user.email" name="email" required
+                      #email="ngModel">
+                  </div>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="page ===1">
+  <div class="row mt-4 py-6">
+    <div class="col-lg-14 mb-lg-0 mb-4">
+      <div class="card ">
+        <div class="card-header pb-0 p-3">
+          <div class="d-flex justify-content-between">
+            <h6 class="mb-4" style="font-size: 1.3em;">Liste des Administrateurs</h6>
+            <button type="button" (click)="pageAjout()" style="float: right;" class="btn btn-success">
+              <i class="mdi mdi-plus"></i>Ajouter</button>
+          </div>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase font-weight-bolder opacity-20">#</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Utilisateur</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20">Hopital</th>
+                  <th class="text-secondary opacity-7 ps-200"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let user of tableauUser; let ind=index">
+                  <tr>
+                    <td> {{ind+1}} </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                          <img [src]="user.profil" class="avatar avatar-hm me-4" alt="user1">
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h2 class="mb-0 " style="font-size: 1.2em; text-transform: capitalize;">{{user.nom}}
+                            {{user.prenom}} </h2>
+                          <p class="text-lowercase text-secondary mb-0">{{user.username}} </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class=" mb-0" style="font-size: 1.5em; text-transform: uppercase;">{{user.hopital.nom}} </p>
+                    </td>
+                    <td>
+                      <button *ngIf="user.statut" class="btn btn-danger" (click)="toggleStatus(user)">
+                        Désactiver
+                      </button>
+                      <button *ngIf="!user.statut" class="btn btn-success" (click)="toggleStatus(user)">
+                        Activer
+                      </button>
+                    </td>
+
+                    <!-- <td class="align-middle ">
+                          <i class="mdi mdi-eye-circle" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color: rgb(255, 0, 174); font-size: 2.8em; margin-right: 10px; margin-left: 200px;" (click)="Voir(user)"></i>
+                           <i class="mdi mdi-pencil-circle"   style="color: rgb(255, 140, 0); font-size: 2.8em; margin-right: 10px;" (click)="pageModif(user) "></i>
+                          <i class="mdi mdi-delete-circle" style="color :rgb(255, 0, 0); font-size: 2.8em; margin-right: 10px;" (click)="pageSup(user)" data-bs-toggle="modal" data-bs-target="#supModal"></i>
+                        
+                        </td>-->
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="page===3">
+  <div class="container-fluid py-6 " style="margin-left: 200px;">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="d-flex align-items-center">
+              <p class="mb-0"> Editer le compte</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form #form="ngForm">
+              <p class="text-uppercase text-sm">Informations du compte</p>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="titre" class="form-control-label">Nom d'utilisateur</label>
+                    <input class="form-control" type="text" [(ngModel)]="userSelect.username" name="username"
+                      placeholder="" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="image" class="form-control-label">Mot de passe</label>
+                    <input class="form-control" type="text" [(ngModel)]="user.password" name="password" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="image" class="form-control-label">Hopital</label>
+                    <select class="form-select form-control" style="font-size: 1.2em;" [(ngModel)]="user.hopital"
+                      name="hopital">
+                      <option *ngFor="let hopital of tableauHopital" [ngValue]="hopital">{{ hopital.nom }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nom" class="form-control-label">Nom</label>
+                    <input class="form-control" type="text" [(ngModel)]="user.nom" name="nom" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nom" class="form-control-label">Prenom</label>
+                    <input class="form-control" type="text" [(ngModel)]="user.prenom" name="prenom" required>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nom" class="form-control-label">Téléphone</label>
+                    <input class="form-control" type="text" [(ngModel)]="user.telephone" name="telephone" required>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="titre" class="form-control-label">Profil</label>
+                    <input class="form-control" type="file" (change)="onFileSelected($event)">
+                  </div>
+                  <button (click)="add()" class="btn btn-primary mr-2">Save</button>
+                  <button type="button" class="btn btn-light" (click)="annuler()">Cancel</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="supModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6 style="margin-right: 30px;">Supprimer Utilisateur : </h6>
+        <h4 style="text-transform: uppercase; color: blueviolet;">{{userSelect.username}}</h4>
+        <div class="modal-footer" style="margin-top: 50px;">
+          <button type="button" (click)="annuler()" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">Confirmer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="actVisible"
+     class="position-fixed top-0 end-0 p-3"
+     style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Compte activé avec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              aria-label="Close" (click)="actVisible = false"></button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="desVisible"
+     class="position-fixed top-0 end-0 p-3"
+     style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Compte Désactivé avec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              aria-label="Close" (click)="desVisible = false"></button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="saveVisible"
+     class="position-fixed top-0 end-0 p-3"
+     style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Compte enregistréavec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              aria-label="Close" (click)="saveVisible = false"></button>
+    </div>
+  </div>
+</div>

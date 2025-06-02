@@ -1,0 +1,154 @@
+<div class="row mt-4 py-6">
+    <div class="col-lg-14 mb-lg-0 mb-4">
+      <div class="card ">
+        <div class="row">
+          <div>
+           <button  class="btn" (click)="type='en cours'" style="margin-left: 10px;" [ngStyle]="{'background-color': type === 'en cours' ? 'blueviolet' : 'rgb(206, 175, 240)', 'color': type === 'en cours' ? '#fff' : '#000'}"> 
+            En Cours
+           </button> 
+            <button class="btn" (click)="type='acheve'" style="margin-left: 10px;" [ngStyle]="{'background-color': type === 'acheve' ? 'blueviolet' : 'rgb(206, 175, 240)', 'color': type === 'acheve' ? '#fff' : '#000'}"> 
+            Achevée
+            </button>
+          </div>
+        </div>
+        <div class="card-header pb-0 p-3">
+          <div class="d-flex justify-content-between" >
+            <h6 class="mb-4" style="font-size: 1.3em;">Liste des Interventions</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table *ngIf="type==='en cours'" class="table align-items-center mb-0">
+              <thead>
+                <tr *ngIf="tableauTraitement.length==0">
+                    <th colspan="6" class="text-center" style="font-size: 1.5em; color: blueviolet; font-style: italic;">
+                        Aucune intervention en cours
+                    </th> </tr>
+                <tr *ngIf="tableauTraitement.length!=0">
+                  <th class="text-uppercase font-weight-bolder opacity-20">#</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20">Alerte</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Date d'Intervention</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Hopital</th>
+                    <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Statut</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let intervention of tableauTraitement ; let ind=index" >
+                  <tr>
+                    <div style="text-align: center;">
+                        <img src="../assets/img/intervention.png"  style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; margin-top: 20px;" alt="user1">
+                      </div>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                          
+                        <div class="d-flex flex-column justify-content-center">
+                          <h2 class="mb-0 " style="font-size: 1.4em;">{{intervention.alerte.titre}} </h2>
+                          <h4 class="text-xs text-secondary mb-0">{{ intervention.alerte.contenu.slice(0, 10) }}... </h4>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="align-middle ">
+                        <p class=" mb-0" style="font-size: 1.4em;">{{intervention.date | date:'dd/MM/yyyy'}} </p>
+                      </td>
+                      <td class="align-middle ">
+                        <p class=" mb-0" style="font-size: 1.4em; text-transform: capitalize;">{{intervention.hopital.nom}} </p>
+                      </td>
+                      <td class="align-middle " *ngIf="intervention.statut==='En_traitement'">
+                        <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase; color: green;"> En Traitement </p>
+                      </td>
+                      <td class="align-middle " *ngIf="intervention.statut==='Interompu'">
+                        <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase; color: orangered;"> Interompu </p>
+                      </td>
+                      <td class="align-middle ">
+                        <i class="mdi mdi-eye-circle" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color: rgb(255, 0, 174); font-size: 2.8em; margin-right: 10px; margin-left: 200px;" (click)="Voir(intervention)"></i>
+                        <i class="mdi mdi-delete-circle" style="color :rgb(255, 0, 0); font-size: 2.8em; margin-right: 10px;" (click)="pageSup(intervention)" data-bs-toggle="modal" data-bs-target="#supModal"></i>
+                      </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+
+            <table *ngIf="type==='acheve'" class="table align-items-center mb-0">
+              <thead>
+            <tr *ngIf="tableauAcheve.length==0">
+                    <th colspan="6" class="text-center" style="font-size: 1.5em; color: blueviolet; font-style: italic;">
+                        Aucune intervention Achevée
+                    </th> </tr>
+                <tr *ngIf="tableauAcheve.length!=0">
+                  <th class="text-uppercase font-weight-bolder opacity-20">#</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20">Alerte</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Date d'Intervention</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Hopital</th>
+                    <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Statut</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let intervention of tableauAcheve ; let ind=index" >
+                  <tr>
+                    <div style="text-align: center;">
+                        <img src="../assets/img/intervention.png"  style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; margin-top: 20px;" alt="user1">
+                      </div>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                          
+                        <div class="d-flex flex-column justify-content-center">
+                          <h2 class="mb-0 " style="font-size: 1.4em;">{{intervention.alerte.titre}} </h2>
+                          <h4 class="text-xs text-secondary mb-0">{{ intervention.alerte.contenu.slice(0, 10) }}... </h4>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="align-middle ">
+                        <p class=" mb-0" style="font-size: 1.4em;">{{intervention.date | date:'dd/MM/yyyy'}} </p>
+                      </td>
+                      <td class="align-middle ">
+                        <p class=" mb-0" style="font-size: 1.4em; text-transform: capitalize;">{{intervention.hopital.nom}} </p>
+                      </td>
+                      <td class="align-middle ">
+                        <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase; color: green;"> Terminé </p>
+                      </td>
+                      <td class="align-middle ">
+                        <i class="mdi mdi-eye-circle" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color: rgb(255, 0, 174); font-size: 2.8em; margin-right: 10px; margin-left: 20px;" (click)="Voir(intervention)"></i>
+                        <i class="mdi mdi-delete-circle" style="color :rgb(255, 0, 0); font-size: 2.8em; margin-right: 10px;" (click)="pageSup(intervention)" data-bs-toggle="modal" data-bs-target="#supModal"></i>
+                      </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="supModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6 style="margin-right: 30px;">Supprimer Intervention :  </h6>
+        <h4 style="text-transform: uppercase; color: blueviolet;">{{interventionSelect.alerte.titre}}</h4>
+      <div class="modal-footer" style="margin-top: 50px;">
+        <button type="button" (click)="annuler()" class="btn btn-primary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TOAST NOTIF -->
+<div *ngIf="popupVisible"
+     class="position-fixed top-0 end-0 p-3"
+     style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Intervention Supprimée avec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              aria-label="Close" (click)="popupVisible = false"></button>
+    </div>
+  </div>
+</div>

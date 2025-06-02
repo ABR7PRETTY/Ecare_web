@@ -1,0 +1,23 @@
+#map-ajout {
+    height: 100px; /* ou la hauteur que vous souhaitez */
+    width: 100%; /* prendra toute la largeur de son conteneur */
+    border: 1px solid #ccc; /* bordure grise */
+    border-radius: 4px; /* coins légèrement arrondis */
+    margin-bottom: 10px; /* espace sous la carte */
+  }
+  
+  /* Optionnel : pour s'assurer que la carte est bien initialisée */
+  .leaflet-container {
+    height: 100%;
+    width: 100%;
+  }
+
+  .clickable {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+  }
+  
+  .clickable:hover {
+    color: #0056b3;
+  }

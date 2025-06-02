@@ -1,0 +1,118 @@
+<div class="row mt-4 py-6">
+    <div class="col-lg-14 mb-lg-0 mb-4">
+      <div class="card ">
+        
+        
+        <div class="card-header pb-0 p-3">
+          <div class="d-flex justify-content-between" >
+            <h6 class="mb-4" style="font-size: 1.3em;">Liste des Alertes</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase font-weight-bolder opacity-20">#</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20">Alerte</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Localisation</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Date de publication</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let alerte of tableauAlerte ; let ind=index" >
+                  <tr>
+                    <div style="text-align: center;">
+                      <img src="../assets/img/alert.png"  style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px; margin-top: 20px;" alt="user1">
+                    </div>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <ng-container *ngFor="let alerte of tableauAlerte" ></ng-container>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h2 class="mb-0 " style="font-size: 1.5em;">{{alerte.titre}} </h2>
+                          <h4 class="text-xs text-secondary mb-0">{{ alerte.contenu.slice(0, 10) }}... </h4>
+                        </div>
+                      </div>
+                    </td>
+                    
+                    <td>
+                      <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase;">{{alerte.localisation}} </p>
+                    </td>
+                    <td class="align-middle ">
+                      <p class=" mb-0" style="font-size: 1.5em; text-transform: uppercase;">{{alerte.date | date:'dd - MM - yyyy'}} </p>
+                    </td>
+                    <td class="align-middle ">
+                        <i class="mdi mdi-eye-circle" data-bs-toggle="modal" data-bs-target="#exampleModal" style="color: rgb(255, 0, 174); font-size: 2.8em; margin-right: 10px; margin-left: 50px;" (click)="Voir(alerte)"></i>
+                        <i class="mdi mdi-delete-circle" style="color :rgb(255, 0, 0); font-size: 2.8em; margin-right: 10px;" (click)="pageSup(alerte)" data-bs-toggle="modal" data-bs-target="#supModal"></i>
+                      </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header  d-flex flex-column align-items-start">
+          <h4 class="modal-title" style="color: #7701cb; text-transform: capitalize;" id="exampleModalLabel">{{alerteSelect.titre}} </h4><br>
+          <p class="modal-title" style="color:brown; font-style: italic;">
+            {{ alerteSelect.date | date:'dd-MM-yyyy ' }} à {{ alerteSelect.date | date:'HH:mm' }}
+            <span style="color: blueviolet; margin-left:30px ">{{alerteSelect.localisation}}</span>
+          </p>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6 style="margin-bottom: 100px;">{{alerteSelect.contenu}} </h6>
+
+          <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;"> 
+            <ng-container *ngFor="let image of alerteSelect.medias">
+              <div>
+                <img [src]="image" style="height: 120px ; width: 120px;" alt="Image de la catégorie"/>
+              </div>
+            </ng-container>
+        </div>
+        <div class="modal-footer" style="margin-top: 50px;">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="supModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6 style="margin-right: 30px;">Supprimer Alerte :  </h6>
+        <h4 style="text-transform: uppercase; color: blueviolet;">{{alerteSelect.titre}}</h4>
+      <div class="modal-footer" style="margin-top: 50px;">
+        <button type="button" (click)="annuler()" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+        <button type="button" (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">Confirmer</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TOAST NOTIF -->
+<div *ngIf="popupVisible"
+     class="position-fixed top-0 end-0 p-3"
+     style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0"
+       role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Alerte Supprimée avec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto"
+              aria-label="Close" (click)="popupVisible = false"></button>
+    </div>
+  </div>
+</div>
+

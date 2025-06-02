@@ -1,0 +1,228 @@
+<div *ngIf="page===2">
+  <div class="container-fluid py-6 " style="margin-left: 200px;">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="d-flex align-items-center">
+              <p class="mb-0"> Ajouter une nouveau Cours</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form #form="ngForm" (ngSubmit)="add()" novalidate>
+              <p class="text-uppercase text-sm">Informations du cours</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titre" class="form-control-label">Titre*
+                      <div *ngIf="titre.invalid && titre.touched" class="text-danger">Le titre est requis.</div>
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="cours.titre" name="titre" #titre="ngModel"
+                      placeholder="Secourir ..." required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="image" class="form-control-label">Fichiers</label>
+                    <input class="form-control" type="file" multiple (change)="onFileSelected($event)">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="description" class="form-control-label">Contenu*
+                      <div *ngIf="contenu.invalid && contenu.touched" class="text-danger">Un contenu est requis.</div>
+                    </label>
+                    <editor apiKey="h001otjy8pkob5zyvrp3gnevwokayoqj8fx2miasyjts66lx" [(ngModel)]="cours.contenu"
+                      name="contenu" #contenu="ngModel" [init]="{
+                            
+                            height: 300,
+                            menubar: false,
+                            plugins: 'link image code lists',
+                            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                          }"></editor>
+                  </div>
+                  <button type="submit" [disabled]="form.invalid" class="btn btn-primary mr-2">Enregistrer</button>
+                  <button type="button" style="margin-left: 30px;" class="btn btn-light"
+                    (click)="annuler()">Retour</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="page ===1">
+  <div class="row mt-4 py-6">
+    <div class="col-lg-14 mb-lg-0 mb-4">
+      <div class="card ">
+        <div class="card-header pb-0 p-3">
+          <div class="d-flex justify-content-between">
+            <h4 class="mb-4" style="font-size: 1.5em; color: blue;">{{currentCat.titre}} </h4>
+            <h6 class="mb-4" style="font-size: 1.3em;">Liste des Cours</h6>
+            <button type="button" (click)="pageAjout()" style="float: right;" class="btn btn-success">
+              <i class="mdi mdi-plus"></i>Ajouter</button>
+          </div>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase font-weight-bolder opacity-20">#</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20">Cours</th>
+                  <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Auteur</th>
+                  <th class="text-secondary opacity-7 ps-200"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let cours of tableauCours; let ind=index">
+                  <tr>
+                    <td> {{ind+1}} </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div>
+                          <img [src]="cours.medias[0]" class="avatar avatar-hm me-4" alt="user1">
+                        </div>
+                        <div class="d-flex flex-column justify-content-center">
+                          <h2 class="mb-0 " style="font-size: 1.5em; text-transform: capitalize; ">{{cours.titre}} </h2>
+
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p class=" mb-0" style="font-size: 1.5em; text-transform: uppercase;">{{currentUser.nom}} </p>
+                      <p class="text-xs text-secondary mb-0" style="text-transform: capitalize;">{{currentUser.prenom}}
+                      </p>
+                    </td>
+                    <td class="align-middle ">
+                      <i class="mdi mdi-eye-circle" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        style="color: rgb(255, 0, 174); font-size: 2.8em; margin-right: 10px; margin-left: 200px;"
+                        (click)="Voir(cours)"></i>
+                      <i class="mdi mdi-pencil-circle"
+                        style="color: rgb(255, 140, 0); font-size: 2.8em; margin-right: 10px;"
+                        (click)="pageModif(cours) "></i>
+                      <i class="mdi mdi-delete-circle"
+                        style="color :rgb(255, 0, 0); font-size: 2.8em; margin-right: 10px;" (click)="pageSup(cours)"
+                        data-bs-toggle="modal" data-bs-target="#supModal"></i>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="page ===3">
+  <div class="container-fluid py-6 " style="margin-left: 200px;">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="d-flex align-items-center">
+              <p class="mb-0"> Modification du Cours</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form #form="ngForm" (ngSubmit)="update()" novalidate>
+              <p class="text-uppercase text-sm">Informations du cours</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label for="categorie" class="form-control-label">categorie</label>
+                    <select class="form-select form-control" style="font-size: 1.2em;"
+                      [(ngModel)]="coursSelect.categorieId" name="categorie">
+                      <option *ngFor="let categorie of tableauCategorie" [value]="categorie.id">{{ categorie.titre }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titre" class="form-control-label">Titre</label>
+                    <input class="form-control" type="text" [(ngModel)]="coursSelect.titre" name="titre" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="image" class="form-control-label">Fichiers</label>
+                    <input class="form-control" type="file" multiple (change)="onFileSelectedModif($event)">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="description" class="form-control-label">Contenu</label>
+                    <editor apiKey="h001otjy8pkob5zyvrp3gnevwokayoqj8fx2miasyjts66lx" [(ngModel)]="coursSelect.contenu"
+                      name="contenu" [init]="{
+                            
+                            height: 300,
+                            menubar: false,
+                            plugins: 'link image code lists',
+                            toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | code'
+                          }"></editor>
+                  </div>
+                  <button type="submit" [disabled]="form.invalid" class="btn btn-primary mr-2">Enregistrer</button>
+                  <button type="button" style="margin-left: 30px;" class="btn btn-light"
+                    (click)="annuler()">Retour</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="supModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6 style="margin-right: 30px;">Supprimer Le Cours : </h6>
+        <h4 style="text-transform: uppercase; color: blueviolet;">{{coursSelect.titre}}</h4>
+        <div class="modal-footer" style="margin-top: 50px;">
+          <button type="button" (click)="annuler()" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">Confirmer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style="color: blue;" id="exampleModalLabel">{{coursSelect.titre}} </h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h6 style="margin-bottom: 100px;" [innerHTML]="getSafeHtml(coursSelect.contenu)"></h6>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;">
+          <ng-container *ngFor="let image of coursSelect.medias">
+            <div>
+              <img [src]="image" style="height: 100px ; width: 100px;" alt="Image de la catégorie" />
+              <i *ngIf="image !== coursSelect.medias[coursSelect.medias.length-1]"
+                class="mdi mdi-arrow-right-bold-circle-outline" style="font-size: 2em; margin-left: 30px;"></i>
+            </div>
+          </ng-container>
+        </div>
+        <div class="modal-footer" style="margin-top: 50px;">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Retour</button>
+          <button type="button" (click)="pageModif(coursSelect)" class="btn btn-primary"
+            data-bs-dismiss="modal">Modifier</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

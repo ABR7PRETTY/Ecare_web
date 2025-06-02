@@ -1,0 +1,267 @@
+<div *ngIf="page===2">
+  <div class="container-fluid py-6 " style="margin-left: 200px;">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="d-flex align-items-center">
+              <p class="mb-0"> Ajouter un nouveau hopital</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form #form="ngForm" (ngSubmit)="add()" novalidate>
+              <p class="text-uppercase text-sm">Informations du hopital</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titre" style="font-size: 1.6 em;">Nom*
+                      <div *ngIf="nom.invalid && nom.touched" class="text-danger">Le nom est requis.</div>
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="hopital.nom" name="hopital"
+                      placeholder="Clinic ..." required #nom="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titre" style="font-size: 1.6 em;">Téléphone*
+                      <div *ngIf="telephone.invalid && telephone.touched" class="text-danger">Le numéro est requis.
+                      </div>
+                    </label>
+                    <input class="form-control" type="text" [(ngModel)]="hopital.telephone" name="telephone"
+                      placeholder="+228" required #telephone="ngModel">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="description" class="form-control-label">Description*
+                      <div *ngIf="description.invalid && description.touched" class="text-danger">La description est
+                        requise.</div>
+                    </label>
+                    <textarea class="form-control" style="height:70px;" [(ngModel)]="hopital.description"
+                      name="description" placeholder="Clinic de Dermatologie, cardiologie..." required
+                      #description="ngModel"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label style="font-size: 1.2em;">Localisation* (cliquez sur la carte)</label>
+
+                    <div *ngIf="mapVisible" id="map-ajout"
+                      style="height: 150px; border: 1px solid #ddd; border-radius: 4px;"></div>
+
+                    <input class="form-control mt-2" type="text" [(ngModel)]="hopital.localisation" name="localisation"
+                      placeholder="Lomé Tokoin BP:1010" readonly>
+                  </div>
+                  <button type="submit" [disabled]="form.invalid" class="btn btn-primary mr-2">Enregistrer</button>
+                  <button type="button" style="margin-left: 30px;" class="btn btn-light"
+                    (click)="annuler()">Retour</button>
+                </div>
+
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="page ===1">
+  <div class="row mt-4 py-6">
+    <div class="col-lg-14 mb-lg-0 mb-4">
+      <div class="card ">
+        <div class="card-header pb-0 p-3">
+          <div class="d-flex justify-content-between">
+            <h6 class="mb-4" style="font-size: 1.3em;">Liste des hopitaux</h6>
+            <button type="button" (click)="pageAjout()" style="float: right;" class="btn btn-success">
+              <i class="mdi mdi-plus"></i>Ajouter</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase font-weight-bolder opacity-20">#</th>
+                <th class="text-uppercase font-weight-bolder opacity-20">Nom</th>
+                <th class="text-uppercase font-weight-bolder opacity-20">Téléphone</th>
+                <th class="text-uppercase font-weight-bolder opacity-20">Description</th>
+                <th class="text-uppercase font-weight-bolder opacity-20 ps-2">Localisation</th>
+                <th class="text-secondary opacity-7"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let hopital of tableauHopital; let ind=index">
+                <tr>
+                  <td>{{ind+1}} </td>
+                  <td>
+                    <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase;">{{hopital.nom}} </p>
+                  </td>
+                  <td>
+                    <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase;">{{hopital.telephone}} </p>
+                  </td>
+                  <td>
+                    <p class=" mb-0" style="font-size: 1.3em; text-transform: uppercase;">{{hopital.description.slice(0,
+                      15)}} </p>
+                  </td>
+                  <td>
+                    <!-- Texte cliquable qui ouvre la modal -->
+                    <p class="mb-0 clickable" style="font-size: 1.2em; text-transform: uppercase;"
+                      (click)="openMapModal(hopital)" data-bs-toggle="modal" data-bs-target="#mapModal">
+                      {{hopital.localisation.slice(0, 15)}}
+                    </p>
+                  </td>
+                  <td class="align-middle ">
+                    <i class="mdi mdi-pencil-circle"
+                      style="color: rgb(255, 140, 0); font-size: 2.8em; margin-right: 10px;"
+                      (click)="pageModif(hopital) "></i>
+                    <i class="mdi mdi-delete-circle"
+                      style="color :rgb(255, 0, 0); font-size: 2.8em; margin-right: 10px;" (click)="pageSup(hopital)"
+                      data-bs-toggle="modal" data-bs-target="#supModal"></i>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="page ===3">
+  <div class="container-fluid py-6 " style="margin-left: 200px;">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="d-flex align-items-center">
+              <p class="mb-0"> Modification de {{hopitalSelect.nom}} </p>
+            </div>
+          </div>
+          <div class="card-body">
+            <form #form="ngForm">
+              <p class="text-uppercase text-sm">Informations de l' hopital</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titre" class="form-control-label">Nom*</label>
+                    <input class="form-control" type="text" [(ngModel)]="hopitalSelect.nom" name="hopital" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="telephone" class="form-control-label">Téléphone*</label>
+                    <input class="form-control" type="text" [(ngModel)]="hopitalSelect.telephone" name="telephone"
+                      required>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="description" class="form-control-label">Description</label>
+                    <textarea class="form-control" style="height:70px;" [(ngModel)]="hopitalSelect.description"
+                      name="description" required></textarea>
+                  </div>
+
+                </div>
+
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label style="font-size: 1.2em;">Localisation* (cliquez sur la carte)</label>
+
+                    <div *ngIf="mapVisible" id="map-modif"
+                      style="height: 150px; border: 1px solid #ddd; border-radius: 4px;"></div>
+
+                    <input class="form-control mt-2" type="text" [(ngModel)]="hopitalSelect.localisation"
+                      name="localisation" placeholder="Lomé Tokoin BP:1010" readonly>
+                  </div>
+                  <button (click)="update()" class="btn btn-primary mr-2">Modifier</button>
+                  <button type="button" class="btn btn-light" (click)="annuler()">Retour</button>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="supModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6 style="margin-right: 30px;">Supprimer Hopital : </h6>
+        <h4 style="text-transform: uppercase; color: blueviolet;">{{hopitalSelect.nom}}</h4>
+        <div class="modal-footer" style="margin-top: 50px;">
+          <button type="button" (click)="annuler()" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button type="button" (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">Confirmer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="saveVisible" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0" role="alert" aria-live="assertive"
+    aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Hopital enregistré avec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"
+        (click)="saveVisible = false"></button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="modifVisible" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0" role="alert" aria-live="assertive"
+    aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Hopital Modifiée avec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"
+        (click)="modifVisible = false"></button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="supVisible" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+  <div class="toast show align-items-center text-white bg-success border-0" role="alert" aria-live="assertive"
+    aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Hopital Supprimé avec succès !
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" aria-label="Close"
+        (click)="supVisible = false"></button>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true"
+  style="margin-left: 100px;">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mapModalLabel">Localisation de {{hopitalSelect.nom}}</h5>
+        <button type="button" class="position-absolute top-0 end-0 m-2 p-1 bg-transparent border-0" data-bs-dismiss="modal" aria-label="Close"
+          style="color: #7701cb; font-size: 1.5rem; line-height: 1;">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="modalMap" style="height: 300px; width: 100%;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,152 @@
+<div *ngIf="page===2">
+    <div class="container-fluid py-6 " style="margin-left: 200px;" >
+        <div class="row">
+          <div class="col-md-8" >
+            <div class="card">
+              <div class="card-header pb-0">
+                <div class="d-flex align-items-center">
+                  <p class="mb-0"> Ajouter une nouvelle Catégorie</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <form #form="ngForm" (ngSubmit)="add()" novalidate>
+                    <p class="text-uppercase text-sm">Informations de la Catégorie</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="titre" style="font-size: 1.6 em;" >Titre</label>
+                                <input class="form-control" type="text" [(ngModel)]="categorieAjout.titre" name="titre" placeholder="Light Bootstrap Dashboard" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="image" class="form-control-label">Image</label>
+                                <input class="form-control" type="file" (change)="onFileSelected($event)" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="description" class="form-control-label">Description</label>
+                                <textarea class="form-control" style="height:100px;" [(ngModel)]="categorieAjout.description" name="description" placeholder="A beautiful Dashboard for Bootstrap 5. It is Free and Open Source." required></textarea>
+                            </div>
+                            <button type="submit" [disabled]="form.invalid" class="btn btn-primary mr-2">Enregistrer</button>
+                            <button style="margin-left: 30px;" type="button" class="btn btn-light" (click)="annuler()">Retour</button>
+                        </div>
+                    </div>
+                </form>
+                
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<div *ngIf="page ===1">
+    <div class="row mt-4 py-6 ">
+        <div class="col-lg-14 mb-lg-0 mb-4 ">
+          <div class="card bg-gray-100 ">
+            <div class="card-header pb-0 p-3 bg-gray-100">
+              <div class="d-flex justify-content-between" >
+                <h6 class="mb-2" style="font-size: 1.3em;">Liste des Catégories</h6>
+                <button type="button" (click)="pageAjout()" style="float: right;" class="btn btn-success">
+                <i class="mdi mdi-plus"></i>Ajouter</button>
+              </div>
+            </div>
+            <div class="table-responsive" style="padding: 20px 20px;">
+              <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 50px;"> 
+                <ng-container *ngFor="let categorie of tableauCategorie; let ind = index;">
+                  <div class="card d-flex flex-column h-100" 
+                    style="width: 16rem; border-radius: 10px; border: 1px solid rgba(122, 186, 251, 0.806); overflow: hidden; transition: 0.3s; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+                    (mouseover)="hoveredIndex = ind" 
+                    (mouseout)="hoveredIndex = null"
+                    [ngStyle]="hoveredIndex === ind ? {'box-shadow': '0 8px 16px rgba(0, 0, 0, 0.3)', 'transform': 'scale(1.05)', 'border': '2px solid rgba(57, 105, 137, 0.749)'} : {'border' : '1px solid rgba(122, 186, 251, 0.806)'}">
+
+                    <img *ngIf="categorie.image" [src]="categorie.image" alt="Image de la catégorie" style="height: 14rem; width: auto;"/>
+                    
+                    <div class="card-body d-flex flex-column flex-grow-1" style="height: 200px;">
+                      <div style="height: 200px;">
+                      <h5 class="card-title" style="color: blue; text-transform: capitalize;">{{categorie.titre}}</h5>
+                      <p class="card-text">{{categorie.description.slice(0, 45)}}...</p>
+                    </div>
+                      <!-- Conteneur des boutons et icônes aligné en bas -->
+                      <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <button class="btn btn-light" [routerLink]="['/super/cours',categorie.id]" routerLinkActive="active">
+                           Cours <i class="mdi mdi-arrow-right" style="color: green; font-size: 1em"></i>
+                        </button>
+                  
+                        <div *ngIf="super">
+                          <i class="mdi mdi-pencil-circle" (click)="pageModif(categorie)" style="color: rgb(255, 200, 0); font-size: 2.2em;"></i>
+                          <i class="mdi mdi-delete-circle"  (click)="pageSup(categorie)" style="color: rgb(255, 0, 0); font-size: 2.2em; " data-bs-toggle="modal" data-bs-target="#supModal"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>      
+                </ng-container>
+              </div>
+                    
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="page===3">
+  <div class="container-fluid py-6 " style="margin-left: 200px;" >
+      <div class="row">
+        <div class="col-md-8" >
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="d-flex align-items-center">
+                <p class="mb-0"> Modification Catégorie</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <form #form="ngForm">
+                  <p class="text-uppercase text-sm">Informations de la Catégorie</p>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="titre" class="form-control-label">Titre</label>
+                              <input class="form-control" type="text" [(ngModel)]="categorieSelect.titre" name="titre" required>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="image" class="form-control-label">Image</label>
+                              <input class="form-control" type="file" (change)="onFileSelectedModif($event)">
+                          </div>
+                      </div>
+                      <div class="col-md-12">
+                          <div class="form-group">
+                              <label for="description" class="form-control-label">Description</label>
+                              <textarea class="form-control" style="height:100px;" [(ngModel)]="categorieSelect.description" name="description" required></textarea>
+                          </div>
+                          <button (click)="update()" class="btn btn-primary mr-2">Save</button>
+                          <button type="button" class="btn btn-light" (click)="annuler()">Cancel</button>
+                      </div>
+                  </div>
+              </form>
+              
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+<div class="modal fade" id="supModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h6 style="margin-right: 30px;">Supprimer Categorie :  </h6>
+              <h4 style="text-transform: uppercase; color: blueviolet;">{{categorieSelect.titre}}</h4>
+            <div class="modal-footer" style="margin-top: 50px;">
+              <button type="button" (click)="annuler()" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" (click)="delete()" class="btn btn-danger" data-bs-dismiss="modal">Confirmer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
