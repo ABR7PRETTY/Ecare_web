@@ -1,12 +1,3 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "dist/ecare/browser/**/*",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    { "src": "/.*", "dest": "/index.html" }
-  ]
+  "buildCommand": "npm install --legacy-peer-deps && npm run build"
 }
