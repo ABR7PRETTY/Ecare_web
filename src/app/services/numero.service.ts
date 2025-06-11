@@ -9,7 +9,7 @@ import { environment } from '../../environement/environement';
 })
 export class NumeroVertService {
 
-  private apiUrl = `${environment.apiUrl}/free/service/numeroVert/`;
+  private apiUrl = `${environment.apiUrl}/free/service/numero/`;
 
   constructor(private http : HttpClient) { }
 

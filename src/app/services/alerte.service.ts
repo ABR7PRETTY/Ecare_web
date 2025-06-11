@@ -9,7 +9,7 @@ import { environment } from '../../environement/environement';
 })
 export class AlerteService {
 
-  private apiUrl = `${environment.apiUrl}/alerte/`;
+  private apiUrl = `${environment.apiUrl}/free/service/alerte/`;
 
   constructor(private http : HttpClient) { }
 

@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api'  // Pour tester en local
+  apiUrl: 'https://api-application-initiation-aux-premiers.onrender.com'  // Pour tester en local
 };
